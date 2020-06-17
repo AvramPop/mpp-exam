@@ -3,18 +3,29 @@ package org.example.server.infrastructure;
 //import org.example.server.service.ScannerService;
 //import org.example.server.service.SensorService;
 
+import org.example.server.service.ScannerCountyService;
+import org.springframework.web.client.RestTemplate;
+
 import java.util.Random;
 
 public class HandlerManager {
   private final TCPServer server;
-//  private final ScannerService scannerService;
+  private final ScannerCountyService scannerService;
   boolean keepGoing = true;
   String toShutdown;
+  String name;
+  int id;
+  boolean openedServer;
+  RestTemplate restTemplate;
   //  private final StudentService studentService;
 
-  public HandlerManager(TCPServer server) {
+  public HandlerManager(TCPServer server, ScannerCountyService scannerService, String name, int id, RestTemplate restTemplate) {
     this.server = server;
-//    this.scannerService = scannerService;
+    this.scannerService = scannerService;
+    this.name = name;
+    this.id = id;
+    openedServer = false;
+    this.restTemplate = restTemplate;
   }
 
   private void addScannerHandler() {
@@ -24,17 +35,16 @@ public class HandlerManager {
           //          System.out.println("received" + request.getBody());
           String[] parsedRequest = request.getBody().split(",");
           //          try {
-          System.out.println("RECEIVED");
-          System.out.println(parsedRequest[0]);
-          System.out.println(Integer.parseInt(parsedRequest[2]));
-          System.out.println(Integer.parseInt(parsedRequest[3]));
-          System.out.println(Integer.parseInt(parsedRequest[4]));
-          try{
-            Thread.sleep(new Random().nextInt(4000));
-          } catch(InterruptedException e){
-            e.printStackTrace();
+          if(Integer.parseInt(parsedRequest[1]) == id){
+            System.out.println("RECEIVED");
+            System.out.println(parsedRequest[0]);
+            System.out.println(Integer.parseInt(parsedRequest[2]));
+            System.out.println(Integer.parseInt(parsedRequest[3]));
+            System.out.println(Integer.parseInt(parsedRequest[4]));
+            scannerService.postData(openedServer, parsedRequest[0], Integer.parseInt(parsedRequest[2]), Integer.parseInt(parsedRequest[3]), Integer.parseInt(parsedRequest[4]));
+            openedServer = true;
+            return new Message("", "");
           }
-          return new Message("", "");
           //            scannerService.saveScanner(
           //                parsedRequest[0],
           //                Integer.parseInt(parsedRequest[1]),
@@ -53,6 +63,7 @@ public class HandlerManager {
           //            }
           //            return new Message(MessageHeader.OK_REQUEST, "");
           //          }
+          return new Message("", "");
         });
   }
 

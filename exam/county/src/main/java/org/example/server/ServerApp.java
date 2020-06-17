@@ -5,7 +5,9 @@ import org.example.server.infrastructure.HandlerManager;
 import org.example.server.infrastructure.TCPServer;
 //import org.example.server.service.ScannerService;
 //import org.example.server.service.SensorService;
+import org.example.server.service.ScannerCountyService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,26 +31,30 @@ public class ServerApp {
       String name = input.readLine().strip();
       System.out.println("Enter county id: ");
       int id = Integer.parseInt(input.readLine().strip());
+      ScannerCountyService scannerCountyService =
+          context.getBean(ScannerCountyService.class);
+      RestTemplate restTemplate = context.getBean(RestTemplate.class);
+      scannerCountyService.setRestTemplate(restTemplate);
+      try {
+        TCPServer tcpServer = new TCPServer(executorService);
+        HandlerManager handlerManager =
+            new HandlerManager(tcpServer, scannerCountyService, name, id, restTemplate);
+        handlerManager.addHandlers();
+        tcpServer.startServer();
+        executorService.shutdown();
+      } catch (RuntimeException ex) {
+        ex.printStackTrace();
+      }
     } catch(IOException e){
       e.printStackTrace();
     }
-//    SensorService sensorService =
-//        context.getBean(SensorService.class);
+
 //
 //    sensorService.setExecutorService(executorService);
 //    ScannerService scannerService =
 //        context.getBean(ScannerService.class);
 
 //    scannerService.setExecutorService(executorService);
-    try {
-      TCPServer tcpServer = new TCPServer(executorService);
-      HandlerManager handlerManager =
-          new HandlerManager(tcpServer);
-      handlerManager.addHandlers();
-      tcpServer.startServer();
-      executorService.shutdown();
-    } catch (RuntimeException ex) {
-      ex.printStackTrace();
-    }
+
   }
 }
