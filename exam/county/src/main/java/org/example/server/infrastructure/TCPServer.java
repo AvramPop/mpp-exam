@@ -22,9 +22,9 @@ public class TCPServer {
     this.port = port;
   }
 
-  public TCPServer(ExecutorService executorService) {
-    this(executorService, Message.PORT);
-  }
+//  public TCPServer(ExecutorService executorService, int port) {
+//    this(executorService, port);
+//  }
 
   public void addHandler(String methodName, UnaryOperator<Message> handler) {
     methodHandlers.put(methodName, handler);

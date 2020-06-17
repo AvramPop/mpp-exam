@@ -18,7 +18,7 @@ public class TCPClient {
    * @return the server's response
    */
   public Message sendAndReceive(Message request) {
-    try (Socket socket = new Socket(Message.HOST, Message.PORT);
+    try (Socket socket = new Socket(Message.HOST, request.PORT);
          InputStream is = socket.getInputStream();
          OutputStream os = socket.getOutputStream()) {
       // System.out.println("sendAndReceive - sending request: " + request);

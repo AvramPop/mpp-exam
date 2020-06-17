@@ -3,8 +3,12 @@ package org.example.server.infrastructure;
 import java.io.*;
 
 public class Message {
-  public static final int PORT = 1234;
+  public int PORT;
   public static final String HOST = "localhost";
+
+  public void setPORT(int PORT){
+    this.PORT = 1234 + PORT;
+  }
 
   private String header;
   private String body;

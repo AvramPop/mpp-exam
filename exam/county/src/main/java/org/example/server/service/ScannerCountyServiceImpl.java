@@ -36,6 +36,7 @@ public class ScannerCountyServiceImpl implements ScannerCountyService {
                             HttpMethod.POST,
                             studentDtoHttpEntity,
                             DataServerDto.class);
+                    this.updated = false;
                   } else {
                     System.out.println("data not changed");
                   }
@@ -48,14 +49,12 @@ public class ScannerCountyServiceImpl implements ScannerCountyService {
   }
   @Override
   public void postData(boolean started, String name, int a, int b, int c){
+    this.name = name;
     this.a += a;
     this.b += b;
     this.c += c;
-    if(a + b + c > 0){
-      this.nr += this.a + this.b + this.c;
+      this.nr += a + b + c;
       this.updated = true;
-    } else {
-      updated = false;
-    }
+
   }
 }

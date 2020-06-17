@@ -31,6 +31,7 @@ public class ScannerClientService {
           () -> {
             Message request =
                 new Message(MessageHeader.SCANNER_ADD, StringEntityFactory.scannerToFileLine(scanner));
+            request.setPORT(id);
             Message response = tcpClient.sendAndReceive(request);
           });
       Thread.sleep(new Random().nextInt(5000));

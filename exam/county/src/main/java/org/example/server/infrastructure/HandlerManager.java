@@ -37,10 +37,10 @@ public class HandlerManager {
           //          try {
           if(Integer.parseInt(parsedRequest[1]) == id){
             System.out.println("RECEIVED");
-            System.out.println(parsedRequest[0]);
-            System.out.println(Integer.parseInt(parsedRequest[2]));
-            System.out.println(Integer.parseInt(parsedRequest[3]));
-            System.out.println(Integer.parseInt(parsedRequest[4]));
+            System.out.print(parsedRequest[0] + " ");
+            System.out.print(Integer.parseInt(parsedRequest[2]) + " ");
+            System.out.print(Integer.parseInt(parsedRequest[3]) + " ");
+            System.out.print(Integer.parseInt(parsedRequest[4]) + "\n");
             scannerService.postData(openedServer, parsedRequest[0], Integer.parseInt(parsedRequest[2]), Integer.parseInt(parsedRequest[3]), Integer.parseInt(parsedRequest[4]));
             openedServer = true;
             return new Message("", "");

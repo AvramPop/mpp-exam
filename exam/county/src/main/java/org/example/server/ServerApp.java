@@ -36,7 +36,7 @@ public class ServerApp {
       RestTemplate restTemplate = context.getBean(RestTemplate.class);
       scannerCountyService.setRestTemplate(restTemplate);
       try {
-        TCPServer tcpServer = new TCPServer(executorService);
+        TCPServer tcpServer = new TCPServer(executorService, 1234 + id);
         HandlerManager handlerManager =
             new HandlerManager(tcpServer, scannerCountyService, name, id, restTemplate);
         handlerManager.addHandlers();
